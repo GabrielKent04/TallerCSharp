@@ -1,0 +1,5 @@
+C:\Users\admin\OneDrive\Documentos\Taller Sección A\TallerIUJO01\TallerIUJO01\bin\Debug\TallerIUJO01.exe
+C:\Users\admin\OneDrive\Documentos\Taller Sección A\TallerIUJO01\TallerIUJO01\bin\Debug\TallerIUJO01.pdb
+C:\Users\admin\OneDrive\Documentos\Taller Sección A\TallerIUJO01\TallerIUJO01\obj\Debug\TallerIUJO01.csprojResolveAssemblyReference.cache
+C:\Users\admin\OneDrive\Documentos\Taller Sección A\TallerIUJO01\TallerIUJO01\obj\Debug\TallerIUJO01.exe
+C:\Users\admin\OneDrive\Documentos\Taller Sección A\TallerIUJO01\TallerIUJO01\obj\Debug\TallerIUJO01.pdb
