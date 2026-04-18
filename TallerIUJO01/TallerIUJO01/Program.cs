@@ -120,6 +120,42 @@ namespace TallerIUJO01
                     Console.WriteLine(" LÍNEA LEÍDA: " + linea);
                 }
             }
+            
+            // --- 7. DESAFIOS ASIGNADOS POR EL PROFE ----
+            
+            // A.
+            
+            string analisisDatos = ("Gabriel Corobo; 123");
+            
+            string[] datos  = analisisDatos.Split(';');
+            
+            string clave = datos[1];
+            
+            if(clave.Contains("123"))
+            	
+            {
+            	
+            	string rutaSeguridad = Path.Combine(rutaRaiz, "Reportes de seguridad");
+            	
+            	string archivoSeguridad = Path.Combine(rutaSeguridad,"SEGURIDAD.TXT");
+
+            if (!Directory.Exists(rutaSeguridad))
+            {
+                Directory.CreateDirectory(rutaSeguridad);
+                Console.WriteLine("\n> Carpeta de reportes de seguridad creada con éxito.");
+            }
+            	
+            using(StreamWriter sw = new StreamWriter(archivoSeguridad))
+            {
+            	sw.WriteLine(string.Format("CLAVE DÉBIL DETECTADA"));
+            	Console.Write("\n>>> Primer Ejercicio realizado correctamente.");
+            }
+               }
+         
+            
+            
+            
+            
 
             Console.WriteLine("\nPresiona cualquier tecla para salir...");
             Console.ReadKey();
