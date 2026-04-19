@@ -135,7 +135,7 @@ namespace TallerIUJO01
             	
             {
             	
-            	string rutaSeguridad = Path.Combine(rutaRaiz, "Reportes de seguridad");
+            	string rutaSeguridad = Path.Combine(rutaReportes, "Reportes de seguridad");
             	
             	string archivoSeguridad = Path.Combine(rutaSeguridad,"SEGURIDAD.TXT");
 
@@ -148,16 +148,62 @@ namespace TallerIUJO01
             using(StreamWriter sw = new StreamWriter(archivoSeguridad))
             {
             	sw.WriteLine(string.Format("CLAVE DÉBIL DETECTADA"));
-            	Console.Write("\n>>> Primer Ejercicio realizado correctamente.");
+            	Console.Write("\n>>> Primer ejercicio realizado correctamente.");
             }
                }
          
             
             
+            // B.
             
+            using (FileStream fsOrigen = new FileStream("avatar.jpg", FileMode.Open, FileAccess.Read))     
+            using (FileStream fsDestino = new FileStream("respaldo.jpg", FileMode.Create, FileAccess.Write)) 
+            {
+            	byte[] cubo = new byte[1024]; 
+            	
+                int cantidadCargada = 0; 
+            	                    
+                while ((cantidadCargada = fsOrigen.Read(cubo, 0, cubo.Length)) > 0) 
+                	
+                {
+    
+                fsDestino.Write(cubo, 0, cantidadCargada);
+                
+                }
+                
+                Console.WriteLine("\n\n>>> ¡Copia finalizada con éxito!");
+            Console.WriteLine("Se han movido los bytes de forma segura usando un buffer de 1KB.");
+                
+                Console.Write("\n>>> Segundo ejercicio realizado correctamente.");
+  
+            }
+           
             
+            // C.
+            
+            string[] listaArchivos = Directory.GetFiles("Datos IUJO");
 
-            Console.WriteLine("\nPresiona cualquier tecla para salir...");
+foreach (string archivo in listaArchivos)
+{
+
+    FileInfo inform = new FileInfo(archivo);
+
+
+    if (inform.Length > 5120)
+    {
+        Console.WriteLine("BORRANDO: " + inform.Name + " por pesado (" + inform.Length + " bytes)");
+        File.Delete(archivo);
+    }
+    else
+    {
+       
+        Console.WriteLine("CONSERVADO: " + inform.Name + " es ligero.");
+    }
+}
+
+   Console.WriteLine("\n>>> Tercer ejercicio realizado correctamente.");
+
+           Console.WriteLine("\nPresiona cualquier tecla para salir...");
             Console.ReadKey();
         }
     }
