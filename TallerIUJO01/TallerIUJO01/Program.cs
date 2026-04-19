@@ -121,90 +121,104 @@ namespace TallerIUJO01
                 }
             }
             
-            // --- 7. DESAFIOS ASIGNADOS POR EL PROFE ----
-            
-            // A.
-            
-            string analisisDatos = ("Gabriel Corobo; 123");
-            
-            string[] datos  = analisisDatos.Split(';');
-            
-            string clave = datos[1];
-            
-            if(clave.Contains("123"))
-            	
-            {
-            	
-            	string rutaSeguridad = Path.Combine(rutaReportes, "Reportes de seguridad");
-            	
-            	string archivoSeguridad = Path.Combine(rutaSeguridad,"SEGURIDAD.TXT");
+            // --- 7. DESAFÍOS ASIGNADOS POR EL PROFE ----
 
-            if (!Directory.Exists(rutaSeguridad))
-            {
-                Directory.CreateDirectory(rutaSeguridad);
-                Console.WriteLine("\n> Carpeta de reportes de seguridad creada con éxito.");
-            }
-            	
-            using(StreamWriter sw = new StreamWriter(archivoSeguridad))
-            {
-            	sw.WriteLine(string.Format("CLAVE DÉBIL DETECTADA"));
-            	Console.Write("\n>>> Primer ejercicio realizado correctamente.");
-            }
-               }
-         
-            
-            
-            // B.
-            
-            using (FileStream fsOrigen = new FileStream("avatar.jpg", FileMode.Open, FileAccess.Read))     
-            using (FileStream fsDestino = new FileStream("respaldo.jpg", FileMode.Create, FileAccess.Write)) 
-            {
-            	byte[] cubo = new byte[1024]; 
-            	
-                int cantidadCargada = 0; 
-            	                    
-                while ((cantidadCargada = fsOrigen.Read(cubo, 0, cubo.Length)) > 0) 
-                	
-                {
+// A. EL DETECTOR DE CONTRASEÑAS "DÉBILES"
+// Aquí simulamos que nos llega un texto con un nombre y una clave separados por ";"
+string analisisDatos = ("Gabriel Corobo; 123");
+
+// Usamos el Split para "picar" el texto en dos partes. 
+// La posición [0] es el nombre y la posición [1] es la clave.
+string[] datos = analisisDatos.Split(';');
+
+// Sacamos la clave de la maleta (el arreglo 'datos')
+string clave = datos[1];
+
+// EL DETECTOR: Preguntamos si la clave tiene el "123" en algún lado
+if(clave.Contains("123"))
+{
+    // Si la clave es débil, preparamos la ruta para el reporte de seguridad
+    // Guardamos la carpeta nueva dentro de la ruta de Reportes que ya teníamos
+    string rutaSeguridad = Path.Combine(rutaReportes, "Reportes de seguridad");
     
-                fsDestino.Write(cubo, 0, cantidadCargada);
-                
-                }
-                
-                Console.WriteLine("\n\n>>> ¡Copia finalizada con éxito!");
-            Console.WriteLine("Se han movido los bytes de forma segura usando un buffer de 1KB.");
-                
-                Console.Write("\n>>> Segundo ejercicio realizado correctamente.");
-  
-            }
-           
-            
-            // C.
-            
-            string[] listaArchivos = Directory.GetFiles("Datos IUJO");
+    // Le ponemos nombre al archivo de texto donde gritaremos el aviso
+    string archivoSeguridad = Path.Combine(rutaSeguridad, "SEGURIDAD.TXT");
 
+    // Revisamos si la carpeta de seguridad existe. Si no está, la fabricamos.
+    if (!Directory.Exists(rutaSeguridad))
+    {
+        Directory.CreateDirectory(rutaSeguridad);
+        Console.WriteLine("\n> Carpeta de reportes de seguridad creada con éxito.");
+    }
+
+    // Encendemos el escritor de archivos para dejar el mensaje
+    // Ojo: Como no tiene el ", true", este archivo se sobreescribe siempre
+    using(StreamWriter sw = new StreamWriter(archivoSeguridad))
+    {
+        sw.WriteLine(string.Format("CLAVE DÉBIL DETECTADA"));
+        Console.Write("\n>>> Primer ejercicio realizado correctamente.");
+    }
+}
+
+
+// B. EL COPIADOR DE IMÁGENES (Fuerza Bruta)
+// Aquí vamos a mover bytes de una imagen a otra usando mangueras (FileStream)
+
+// 1. Abrimos la manguera que succiona la imagen original (LECTURA)
+using (FileStream fsOrigen = new FileStream("avatar.jpg", FileMode.Open, FileAccess.Read))     
+// 2. Abrimos la manguera que escupe los datos en la copia (ESCRITURA)
+using (FileStream fsDestino = new FileStream("respaldo.jpg", FileMode.Create, FileAccess.Write)) 
+{
+    // Creamos el "cubo" (buffer) para mover los datos de 1024 en 1024 bytes (1 KB)
+    byte[] cubo = new byte[1024]; 
+    
+    // Un contador para saber cuánto líquido (bytes) entró en el cubo en cada viaje
+    int cantidadCargada = 0; 
+                                        
+    // EL BUCLE: Mientras la manguera logre cargar algo en el cubo...
+    // El Read llena el cubo y nos dice cuánto pesó lo que entró
+    while ((cantidadCargada = fsOrigen.Read(cubo, 0, cubo.Length)) > 0) 
+    {
+        // Vaciamos el cubo en el destino, pero SOLO lo que cargamos de verdad
+        fsDestino.Write(cubo, 0, cantidadCargada);
+    }
+    
+    Console.WriteLine("\n\n>>> ¡Copia finalizada con éxito!");
+    Console.WriteLine("Se han movido los bytes de forma segura usando un buffer de 1KB.");
+    Console.Write("\n>>> Segundo ejercicio realizado correctamente.");
+}
+
+
+// C. EL LIMPIADOR DE ARCHIVOS PESADOS
+// Aquí vamos a revisar una carpeta y borrar lo que estorbe
+
+// 1. Le tomamos una "foto" a la carpeta 'Datos IUJO' para ver qué archivos hay
+string[] listaArchivos = Directory.GetFiles("Datos IUJO");
+
+// 2. Caminamos por esa lista de archivos uno por uno
 foreach (string archivo in listaArchivos)
 {
-
+    // 3. Llamamos al 'inspector' (FileInfo) para que pese el archivo
     FileInfo inform = new FileInfo(archivo);
 
-
+    // 4. LA REGLA: Si pesa más de 5KB (5 * 1024 = 5120 bytes), se borra
     if (inform.Length > 5120)
     {
+        // Si es gordo, lo sacamos del disco
         Console.WriteLine("BORRANDO: " + inform.Name + " por pesado (" + inform.Length + " bytes)");
         File.Delete(archivo);
     }
     else
     {
-       
+        // Si es flaco, se queda
         Console.WriteLine("CONSERVADO: " + inform.Name + " es ligero.");
     }
 }
 
-   Console.WriteLine("\n>>> Tercer ejercicio realizado correctamente.");
+Console.WriteLine("\n>>> Tercer ejercicio realizado correctamente.");
 
-           Console.WriteLine("\nPresiona cualquier tecla para salir...");
-            Console.ReadKey();
+Console.WriteLine("\nPresiona cualquier tecla para salir...");
+Console.ReadKey();
         }
     }
 }
